@@ -3,17 +3,20 @@ import 'package:animate_do/animate_do.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saz_portfolio/core/constants.dart';
 import 'package:saz_portfolio/core/theme.dart';
-import 'dart:html' as html;
+import 'package:url_launcher/url_launcher.dart';
 
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
 
-  void _downloadResume() {
-    html.AnchorElement anchorElement = html.AnchorElement(
-      href: 'assets/resume/Abraar_Resume.pdf',
-    );
-    anchorElement.download = 'Syed_Abraar_Zeeshan_Resume.pdf';
-    anchorElement.click();
+  Future<void> _downloadResume() async {
+    final url = Uri.parse('/assets/resume/Resume.pdf');
+
+    if (!await launchUrl(
+      url,
+      webOnlyWindowName: '_blank', // opens in new tab
+    )) {
+      throw Exception('Could not open resume');
+    }
   }
 
   @override
