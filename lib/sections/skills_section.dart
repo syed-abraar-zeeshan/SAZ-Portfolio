@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../core/theme.dart';
+import '../widgets/section_title.dart';
 
 class SkillsSection extends StatelessWidget {
   const SkillsSection({super.key});
@@ -51,77 +52,60 @@ class SkillsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 80),
-      color: const Color(0xFFF8FFFE),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Section Header
-          FadeInDown(
-            duration: const Duration(milliseconds: 600),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(width: 24, height: 1.5, color: AppTheme.primary),
-                    const SizedBox(width: 8),
-                    Text(
-                      'WHAT I KNOW',
-                      style: GoogleFonts.dmMono(
-                        fontSize: 11,
-                        color: AppTheme.primary,
-                        letterSpacing: 0.15,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Core Skills & ',
-                        style: AppTheme.displayMedium,
-                      ),
-                      TextSpan(
-                        text: 'Tech Stack',
-                        style: AppTheme.displayMedium.copyWith(
-                          color: AppTheme.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < 800;
+        int columns = 4;
+        if (constraints.maxWidth < 500) {
+          columns = 1;
+        } else if (constraints.maxWidth < 700) {
+          columns = 2;
+        } else if (constraints.maxWidth < 1000) {
+          columns = 3;
+        }
 
-          const SizedBox(height: 48),
-
-          // Skills Grid
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 1.4,
-            ),
-            itemCount: skills.length,
-            itemBuilder: (context, index) {
-              return FadeInUp(
-                delay: Duration(milliseconds: index * 100),
-                duration: const Duration(milliseconds: 500),
-                child: _SkillCard(skill: skills[index]),
-              );
-            },
+        return Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 20 : 80,
+            vertical: isMobile ? 48 : 80,
           ),
-        ],
-      ),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FadeInDown(
+                duration: const Duration(milliseconds: 600),
+                child: SectionTitle(
+                  tag: 'WHAT I KNOW',
+                  titleNormal: 'Core Skills &',
+                  titleColored: 'Tech Stack',
+                  isMobile: isMobile,
+                ),
+              ),
+              const SizedBox(height: 40),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: columns,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: columns == 1 ? 2.2 : 1.5,
+                ),
+                itemCount: skills.length,
+                itemBuilder: (context, index) {
+                  return FadeInUp(
+                    delay: Duration(milliseconds: index * 80),
+                    duration: const Duration(milliseconds: 500),
+                    child: _SkillCard(skill: skills[index]),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -144,40 +128,50 @@ class _SkillCardState extends State<_SkillCard> {
       onExit: (_) => setState(() => _hovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: _hovered ? AppTheme.primaryLight : AppTheme.background,
+          color: _hovered
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
+              : Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: _hovered ? AppTheme.accent : AppTheme.border,
+            color: _hovered
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).dividerColor,
             width: 0.5,
           ),
+          boxShadow: [
+            if (Theme.of(context).brightness == Brightness.dark)
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            // Icon
             Icon(
               widget.skill['icon'] as IconData,
-              color: _hovered ? AppTheme.primary : AppTheme.textMuted,
-              size: 22,
+              color: _hovered
+                  ? AppTheme.primary
+                  : Theme.of(context).textTheme.bodySmall!.color,
+              size: 20,
             ),
-            const SizedBox(height: 10),
-
-            // Title
+            const SizedBox(height: 8),
             Text(
               widget.skill['title'] as String,
               style: GoogleFonts.syne(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: AppTheme.textPrimary,
+                color: Theme.of(context).textTheme.bodyLarge!.color,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 10),
-
-            // Tags
+            const SizedBox(height: 8),
             Wrap(
               spacing: 4,
               runSpacing: 4,
@@ -185,16 +179,18 @@ class _SkillCardState extends State<_SkillCard> {
                   .map(
                     (tag) => Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
+                        horizontal: 7,
                         vertical: 3,
                       ),
                       decoration: BoxDecoration(
                         color: _hovered
-                            ? Colors.white
-                            : const Color(0xFFF3F4F6),
+                            ? Theme.of(context).colorScheme.surface
+                            : Theme.of(context).colorScheme.surface.withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(4),
                         border: Border.all(
-                          color: _hovered ? AppTheme.accent : AppTheme.border,
+                          color: _hovered
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).dividerColor,
                           width: 0.5,
                         ),
                       ),
@@ -203,8 +199,8 @@ class _SkillCardState extends State<_SkillCard> {
                         style: GoogleFonts.dmMono(
                           fontSize: 9,
                           color: _hovered
-                              ? AppTheme.primaryDark
-                              : AppTheme.textSecondary,
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).textTheme.bodyMedium!.color,
                         ),
                       ),
                     ),

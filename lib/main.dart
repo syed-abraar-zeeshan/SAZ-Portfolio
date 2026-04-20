@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:saz_portfolio/home_page.dart';
+import 'package:saz_portfolio/theme_controller.dart';
 
-void main() {
-  runApp(const MyPortfolio());
+import 'core/theme.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final themeController = ThemeController();
+  await themeController.loadTheme();
+  runApp(
+    ChangeNotifierProvider.value(
+      value: ThemeController(),
+      child: const MyPortfolio(),
+    ),
+  );
 }
 
 class MyPortfolio extends StatelessWidget {
@@ -10,13 +23,13 @@ class MyPortfolio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeController = Provider.of<ThemeController>(context);
     return MaterialApp(
       title: 'Syed Abraar Zeeshan | Flutter Developer',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Inter',
-        scaffoldBackgroundColor: const Color(0xFFFFFFFF),
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeController.themeMode,
       home: const HomePage(),
     );
   }

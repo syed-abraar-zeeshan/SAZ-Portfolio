@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../core/theme.dart';
+import '../widgets/section_title.dart';
 
 class ProjectsSection extends StatelessWidget {
   const ProjectsSection({super.key});
@@ -9,112 +10,159 @@ class ProjectsSection extends StatelessWidget {
   static const List<Map<String, dynamic>> projects = [
     {
       'number': '01',
-      'name': 'Indipe Payment',
-      'type': 'FINTECH · DIGITAL PAYMENTS',
+      'name': 'NowVision',
+      'type': 'CONSTRUCTION · SITE INSPECTION',
       'desc':
-          'A secure digital payment module within the Indipe Wealth app for real-time fund transfers. Merged native Kotlin code via platform channels for seamless Flutter-native interaction.',
-      'icon': Icons.credit_card,
+          'Built end-to-end inspection and site reporting flows using GetX, enabling real-time upload of images, panoramas, and location data from construction sites into the NowVision AI platform.',
+      'icon': Icons.camera_outdoor,
       'color': Color(0xFFE1F5EE),
       'iconColor': Color(0xFF1D9E75),
-      'tags': ['Flutter', 'Kotlin', 'Firebase', 'BLoC', 'Clean Architecture'],
+      'tags': ['Flutter', 'GetX', 'MVC', 'Clean Architecture'],
     },
     {
       'number': '02',
-      'name': 'EZIT Guardian',
-      'type': 'FINTECH · ASSET TRACKING',
+      'name': 'Indipe Payment',
+      'type': 'FINTECH · DIGITAL PAYMENTS',
       'desc':
-          'A nominee and asset tracking app with real-time financial insights and secure data handling. Applied MVVM architecture and Riverpod for scalable state management.',
-      'icon': Icons.shield,
+          'Secure real-time payment transfers via Flutter-Kotlin integration. Created reusable payment modules integrated into multiple apps. Increased maintainability by 25% using BLoC and Clean Architecture.',
+      'icon': Icons.credit_card,
       'color': Color(0xFFE6F1FB),
       'iconColor': Color(0xFF185FA5),
-      'tags': ['Flutter', 'Riverpod', 'REST APIs', 'MVVM'],
+      'tags': ['Flutter', 'Kotlin', 'BLoC', 'Clean Architecture'],
     },
     {
       'number': '03',
-      'name': 'Integra 2.0',
-      'type': 'IOT · RENEWABLE ENERGY',
+      'name': 'EZIT Guardian',
+      'type': 'FINTECH · ASSET TRACKING',
       'desc':
-          'A renewable energy monitoring app with live power metrics and analytics. Enabled real-time data visualization via continuous API syncing across Android and iOS.',
-      'icon': Icons.bolt,
+          'Real-time nominee and asset tracking with enhanced data security. Improved data fetch success by 25% via advanced error handling, retry logic, and offline caching using Hive.',
+      'icon': Icons.shield,
       'color': Color(0xFFEEEDFE),
       'iconColor': Color(0xFF534AB7),
-      'tags': ['Flutter', 'GetX', 'REST APIs', 'MVC'],
+      'tags': ['Flutter', 'Riverpod', 'REST APIs', 'MVVM', 'Hive'],
+    },
+    {
+      'number': '04',
+      'name': 'Integra Global',
+      'type': 'IOT · RENEWABLE ENERGY',
+      'desc':
+          'Renewable energy monitoring with real-time analytics via SignalR. Reduced data latency by 30% through API optimization and efficient state management across Android and iOS.',
+      'icon': Icons.bolt,
+      'color': Color(0xFFFAEEDA),
+      'iconColor': Color(0xFF854F0B),
+      'tags': ['Flutter', 'GetX', 'REST APIs', 'MVC', 'SignalR'],
     },
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 80),
-      color: const Color(0xFFF8FFFE),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Section Header
-          FadeInDown(
-            duration: const Duration(milliseconds: 600),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(width: 24, height: 1.5, color: AppTheme.primary),
-                    const SizedBox(width: 8),
-                    Text(
-                      'WHAT I\'VE BUILT',
-                      style: GoogleFonts.dmMono(
-                        fontSize: 11,
-                        color: AppTheme.primary,
-                        letterSpacing: 0.15,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < 800;
+        return Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 20 : 80,
+            vertical: isMobile ? 48 : 80,
+          ),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Section Title
+              FadeInDown(
+                duration: const Duration(milliseconds: 600),
+                child: SectionTitle(
+                  tag: "WHAT I'VE BUILT",
+                  titleNormal: 'Featured',
+                  titleColored: 'Projects',
+                  isMobile: isMobile,
+                ),
+              ),
+
+              const SizedBox(height: 40),
+
+              // ── PROJECT CARDS LAYOUT ──
+              if (isMobile)
+                // Mobile: single column
+                Column(
+                  children: List.generate(
+                    projects.length,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: FadeInUp(
+                        delay: Duration(milliseconds: index * 100),
+                        duration: const Duration(milliseconds: 600),
+                        child: _ProjectCard(project: projects[index]),
                       ),
+                    ),
+                  ),
+                )
+              else
+                // Desktop: 2x2 grid
+                Column(
+                  children: [
+                    // Row 1 — Project 01 & 02
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 16),
+                            child: FadeInUp(
+                              delay: const Duration(milliseconds: 0),
+                              duration: const Duration(milliseconds: 600),
+                              child: _ProjectCard(project: projects[0]),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: FadeInUp(
+                              delay: const Duration(milliseconds: 100),
+                              duration: const Duration(milliseconds: 600),
+                              child: _ProjectCard(project: projects[1]),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // Row 2 — Project 03 & 04
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 16),
+                            child: FadeInUp(
+                              delay: const Duration(milliseconds: 200),
+                              duration: const Duration(milliseconds: 600),
+                              child: _ProjectCard(project: projects[2]),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: FadeInUp(
+                              delay: const Duration(milliseconds: 300),
+                              duration: const Duration(milliseconds: 600),
+                              child: _ProjectCard(project: projects[3]),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Featured ',
-                        style: AppTheme.displayMedium,
-                      ),
-                      TextSpan(
-                        text: 'Projects',
-                        style: AppTheme.displayMedium.copyWith(
-                          color: AppTheme.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            ],
           ),
-
-          const SizedBox(height: 48),
-
-          // Projects Grid
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(
-              projects.length,
-              (index) => Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: index < projects.length - 1 ? 20 : 0,
-                  ),
-                  child: FadeInUp(
-                    delay: Duration(milliseconds: index * 150),
-                    duration: const Duration(milliseconds: 600),
-                    child: _ProjectCard(project: projects[index]),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -132,6 +180,7 @@ class _ProjectCardState extends State<_ProjectCard> {
 
   @override
   Widget build(BuildContext context) {
+    final baseColor = widget.project['color'] as Color;
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
@@ -139,21 +188,40 @@ class _ProjectCardState extends State<_ProjectCard> {
         duration: const Duration(milliseconds: 250),
         transform: Matrix4.translationValues(0, _hovered ? -6 : 0, 0),
         decoration: BoxDecoration(
-          color: AppTheme.background,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: _hovered ? AppTheme.accent : AppTheme.border,
+            color: _hovered ? Theme.of(context).colorScheme.primary: Theme.of(context).dividerColor,
             width: _hovered ? 1 : 0.5,
           ),
+          boxShadow: [
+            if (Theme.of(context).brightness == Brightness.dark)
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.4),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+              ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top Banner
+            // Banner
             Container(
-              height: 120,
+              height: 110,
+
               decoration: BoxDecoration(
-                color: widget.project['color'] as Color,
+                gradient: Theme.of(context).brightness == Brightness.dark
+                    ? LinearGradient(
+                  colors: [
+                    baseColor.withValues(alpha: 0.18),
+                    baseColor.withValues(alpha: 0.05),
+                  ],
+                )
+                    : null,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? null
+                    : baseColor,
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(14),
                 ),
@@ -163,22 +231,22 @@ class _ProjectCardState extends State<_ProjectCard> {
                   Center(
                     child: Icon(
                       widget.project['icon'] as IconData,
-                      size: 48,
-                      color: (widget.project['iconColor'] as Color).withOpacity(
+                      size: 44,
+                      color: (widget.project['iconColor'] as Color).withValues(alpha:
                         0.6,
                       ),
                     ),
                   ),
                   Positioned(
-                    top: 12,
-                    right: 14,
+                    top: 10,
+                    right: 12,
                     child: Text(
                       widget.project['number'] as String,
                       style: GoogleFonts.syne(
                         fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: (widget.project['iconColor'] as Color)
-                            .withOpacity(0.4),
+                            .withValues(alpha: 0.4),
                       ),
                     ),
                   ),
@@ -188,22 +256,19 @@ class _ProjectCardState extends State<_ProjectCard> {
 
             // Content
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Project Name
                   Text(
                     widget.project['name'] as String,
                     style: GoogleFonts.syne(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.w800,
-                      color: AppTheme.textPrimary,
+                      color: Theme.of(context).textTheme.bodyLarge!.color,
                     ),
                   ),
                   const SizedBox(height: 4),
-
-                  // Type
                   Text(
                     widget.project['type'] as String,
                     style: GoogleFonts.dmMono(
@@ -212,20 +277,16 @@ class _ProjectCardState extends State<_ProjectCard> {
                       letterSpacing: 0.08,
                     ),
                   ),
-                  const SizedBox(height: 12),
-
-                  // Description
+                  const SizedBox(height: 10),
                   Text(
                     widget.project['desc'] as String,
                     style: GoogleFonts.dmSans(
                       fontSize: 12,
-                      color: AppTheme.textSecondary,
+                      color: Theme.of(context).colorScheme.primary,
                       height: 1.65,
                     ),
                   ),
-                  const SizedBox(height: 16),
-
-                  // Tags
+                  const SizedBox(height: 14),
                   Wrap(
                     spacing: 5,
                     runSpacing: 5,
@@ -237,10 +298,12 @@ class _ProjectCardState extends State<_ProjectCard> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFF3F4F6),
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.12)
+                                  : const Color(0xFFF3F4F6),
                               borderRadius: BorderRadius.circular(4),
                               border: Border.all(
-                                color: AppTheme.border,
+                                color: Theme.of(context).dividerColor,
                                 width: 0.5,
                               ),
                             ),
@@ -248,7 +311,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                               tag,
                               style: GoogleFonts.dmMono(
                                 fontSize: 9,
-                                color: AppTheme.textSecondary,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ),

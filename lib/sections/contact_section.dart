@@ -4,193 +4,121 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../core/theme.dart';
 import '../core/constants.dart';
+import '../widgets/section_title.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
 
   Future<void> _launch(String url) async {
     final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    }
+    if (await canLaunchUrl(uri)) await launchUrl(uri);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 80),
-      color: AppTheme.background,
-      child: Row(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < 800;
+        return Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 20 : 80,
+            vertical: isMobile ? 48 : 80,
+          ),
+          color: Theme.of(context).colorScheme.surface,
+          child: isMobile
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildLeft(context, isMobile),
+                    const SizedBox(height: 40),
+                    _buildRight(),
+                  ],
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: 5, child: _buildLeft(context, isMobile)),
+                    const SizedBox(width: 80),
+                    Expanded(flex: 4, child: _buildRight()),
+                  ],
+                ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLeft(BuildContext context, bool isMobile) {
+    return FadeInLeft(
+      duration: const Duration(milliseconds: 600),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // LEFT
-          Expanded(
-            flex: 5,
-            child: FadeInLeft(
-              duration: const Duration(milliseconds: 600),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Tag
-                  Row(
-                    children: [
-                      Container(
-                        width: 24,
-                        height: 1.5,
-                        color: AppTheme.primary,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'LET\'S CONNECT',
-                        style: GoogleFonts.dmMono(
-                          fontSize: 11,
-                          color: AppTheme.primary,
-                          letterSpacing: 0.15,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Heading
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Let\'s Build\n',
-                          style: AppTheme.displayMedium,
-                        ),
-                        TextSpan(
-                          text: 'Something Great.',
-                          style: AppTheme.displayMedium.copyWith(
-                            color: AppTheme.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Description
-                  Text(
-                    'I\'m actively looking for Flutter developer roles.\nWhether it\'s a full-time position, freelance project,\nor just a chat about mobile development — I\'d love to connect.',
-                    style: AppTheme.bodyLarge,
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  // Availability Badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryLight,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppTheme.accent, width: 0.5),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF16A34A),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          'Available for new opportunities',
-                          style: GoogleFonts.dmMono(
-                            fontSize: 12,
-                            color: AppTheme.primaryDark,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // Send Message Button
-                  ElevatedButton(
-                    onPressed: () => _launch('mailto:${AppConstants.email}'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primary,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 36,
-                        vertical: 18,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      'Send a Message →',
-                      style: GoogleFonts.syne(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+          SectionTitle(
+            tag: "LET'S CONNECT",
+            titleNormal: "Let's Build",
+            titleColored: 'Something Great.',
+            isMobile: isMobile,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            "I'm actively looking for Flutter developer roles.\nWhether it's a full-time position, freelance project,\nor just a chat about mobile development — I'd love to connect.",
+            style: GoogleFonts.dmSans(
+              fontSize: isMobile ? 13 : 16,
+              color: Theme.of(context).textTheme.bodySmall!.color,
+              height: 1.7,
             ),
           ),
-
-          const SizedBox(width: 80),
-
-          // RIGHT
-          Expanded(
-            flex: 4,
-            child: FadeInRight(
-              duration: const Duration(milliseconds: 600),
-              child: Column(
-                children: [
-                  _buildContactCard(
-                    icon: Icons.email_outlined,
-                    label: 'EMAIL',
-                    value: AppConstants.email,
-                    color: const Color(0xFFE1F5EE),
-                    iconColor: AppTheme.primary,
-                    onTap: () => _launch('mailto:${AppConstants.email}'),
+          const SizedBox(height: 32),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Theme.of(context).dividerColor, width: 0.5),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF16A34A),
+                    shape: BoxShape.circle,
                   ),
-                  const SizedBox(height: 12),
-                  _buildContactCard(
-                    icon: Icons.work_outline,
-                    label: 'LINKEDIN',
-                    value: 'linkedin.com/in/syedabraarzeeshan',
-                    color: const Color(0xFFE6F1FB),
-                    iconColor: const Color(0xFF185FA5),
-                    onTap: () => _launch(AppConstants.linkedin),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  'Available for new opportunities',
+                  style: GoogleFonts.dmMono(
+                    fontSize: 11,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                  const SizedBox(height: 12),
-                  _buildContactCard(
-                    icon: Icons.phone_outlined,
-                    label: 'PHONE',
-                    value: AppConstants.phone,
-                    color: const Color(0xFFEAF3DE),
-                    iconColor: const Color(0xFF3B6D11),
-                    onTap: () => _launch('tel:${AppConstants.phone}'),
-                  ),
-                  const SizedBox(height: 12),
-                  _buildContactCard(
-                    icon: Icons.location_on_outlined,
-                    label: 'LOCATION',
-                    value: AppConstants.location,
-                    color: const Color(0xFFF1EFE8),
-                    iconColor: const Color(0xFF5F5E5A),
-                    onTap: null,
-                  ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 28),
+          ElevatedButton(
+            onPressed: () => _launch('mailto:${AppConstants.email}'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primary,
+              foregroundColor: Colors.white,
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 24 : 36,
+                vertical: isMobile ? 14 : 18,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              elevation: 0,
+            ),
+            child: Text(
+              'Send a Message →',
+              style: GoogleFonts.syne(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -199,26 +127,62 @@ class ContactSection extends StatelessWidget {
     );
   }
 
-  Widget _buildContactCard({
-    required IconData icon,
-    required String label,
-    required String value,
-    required Color color,
-    required Color iconColor,
-    required VoidCallback? onTap,
-  }) {
-    return _HoverContactCard(
-      icon: icon,
-      label: label,
-      value: value,
-      color: color,
-      iconColor: iconColor,
-      onTap: onTap,
+  Widget _buildRight() {
+    return FadeInRight(
+      duration: const Duration(milliseconds: 600),
+      child: Column(
+        children: [
+          _ContactCard(
+            icon: Icons.email_outlined,
+            label: 'EMAIL',
+            value: AppConstants.email,
+            color: const Color(0xFFE1F5EE),
+            iconColor: AppTheme.primary,
+            onTap: () => _launch('mailto:${AppConstants.email}'),
+          ),
+          const SizedBox(height: 12),
+          _ContactCard(
+            icon: Icons.work_outline,
+            label: 'LINKEDIN',
+            value: 'linkedin.com/in/syedabraarzeeshan',
+            color: const Color(0xFFE6F1FB),
+            iconColor: const Color(0xFF185FA5),
+            onTap: () => _launch(AppConstants.linkedin),
+          ),
+          const SizedBox(height: 12),
+          _ContactCard(
+            icon: Icons.code,
+            label: 'GITHUB',
+            value: 'github.com/syedabraarzeeshan',
+            color: const Color(0xFFF1EFE8),
+            iconColor: const Color(0xFF444441),
+            onTap: () => _launch(AppConstants.github),
+          ),
+          const SizedBox(height: 12),
+          _ContactCard(
+            icon: Icons.phone_outlined,
+            label: 'PHONE',
+            value: AppConstants.phone,
+            color: const Color(0xFFEAF3DE),
+            iconColor: const Color(0xFF3B6D11),
+            onTap: () => _launch('tel:${AppConstants.phone}'),
+          ),
+          const SizedBox(height: 12),
+          _ContactCard(
+            icon: Icons.location_on_outlined,
+            label: 'LOCATION',
+            value: AppConstants.location,
+            color: const Color(0xFFFAEEDA),
+            iconColor: const Color(0xFF854F0B),
+            onTap: null,
+          ),
+        ],
+      ),
     );
   }
 }
 
-class _HoverContactCard extends StatefulWidget {
+class _ContactCard extends StatefulWidget {
   final IconData icon;
   final String label;
   final String value;
@@ -226,7 +190,7 @@ class _HoverContactCard extends StatefulWidget {
   final Color iconColor;
   final VoidCallback? onTap;
 
-  const _HoverContactCard({
+  const _ContactCard({
     required this.icon,
     required this.label,
     required this.value,
@@ -236,10 +200,10 @@ class _HoverContactCard extends StatefulWidget {
   });
 
   @override
-  State<_HoverContactCard> createState() => _HoverContactCardState();
+  State<_ContactCard> createState() => _ContactCardState();
 }
 
-class _HoverContactCardState extends State<_HoverContactCard> {
+class _ContactCardState extends State<_ContactCard> {
   bool _hovered = false;
 
   @override
@@ -256,16 +220,15 @@ class _HoverContactCardState extends State<_HoverContactCard> {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppTheme.background,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: _hovered ? AppTheme.accent : AppTheme.border,
+              color: _hovered ? Theme.of(context).colorScheme.primary: Theme.of(context).dividerColor,
               width: _hovered ? 1 : 0.5,
             ),
           ),
           child: Row(
             children: [
-              // Icon Box
               Container(
                 width: 44,
                 height: 44,
@@ -276,8 +239,6 @@ class _HoverContactCardState extends State<_HoverContactCard> {
                 child: Icon(widget.icon, color: widget.iconColor, size: 20),
               ),
               const SizedBox(width: 16),
-
-              // Label + Value
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,7 +247,7 @@ class _HoverContactCardState extends State<_HoverContactCard> {
                       widget.label,
                       style: GoogleFonts.dmMono(
                         fontSize: 9,
-                        color: AppTheme.textMuted,
+                        color: Theme.of(context).textTheme.bodySmall!.color,
                         letterSpacing: 0.1,
                       ),
                     ),
@@ -294,22 +255,22 @@ class _HoverContactCardState extends State<_HoverContactCard> {
                     Text(
                       widget.value,
                       style: GoogleFonts.dmSans(
-                        fontSize: 13,
+                        fontSize: 12,
                         fontWeight: FontWeight.w500,
                         color: _hovered
                             ? AppTheme.primary
-                            : AppTheme.textPrimary,
+                            : Theme.of(context).textTheme.bodyLarge!.color,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
               ),
-
               if (widget.onTap != null)
                 Icon(
                   Icons.arrow_forward_ios,
                   size: 12,
-                  color: _hovered ? AppTheme.primary : AppTheme.textMuted,
+                  color: _hovered ? AppTheme.primary : Theme.of(context).textTheme.bodySmall!.color,
                 ),
             ],
           ),

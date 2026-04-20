@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:saz_portfolio/theme_controller.dart';
 import '../core/theme.dart';
 import '../core/constants.dart';
 
@@ -26,15 +28,18 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 800;
     return Container(
       width: double.infinity,
       height: 64,
       decoration: BoxDecoration(
-        color: AppTheme.background,
-        border: Border(bottom: BorderSide(color: AppTheme.border, width: 0.5)),
+        color: Theme.of(context).colorScheme.surface,
+        border: Border(
+          bottom: BorderSide(color: Theme.of(context).dividerColor, width: 0.5),
+        ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 80),
+        padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 80),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -42,8 +47,8 @@ class _NavBarState extends State<NavBar> {
             Row(
               children: [
                 Container(
-                  width: 36,
-                  height: 36,
+                  width: 34,
+                  height: 34,
                   decoration: BoxDecoration(
                     color: AppTheme.primary,
                     borderRadius: BorderRadius.circular(8),
@@ -52,95 +57,127 @@ class _NavBarState extends State<NavBar> {
                     child: Text(
                       'SAZ',
                       style: GoogleFonts.syne(
-                        fontSize: 11,
+                        fontSize: 10,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppConstants.name,
-                      style: GoogleFonts.syne(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: AppTheme.textPrimary,
+                const SizedBox(width: 10),
+                if (!isMobile)
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppConstants.name,
+                        style: GoogleFonts.syne(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                        ),
                       ),
-                    ),
-                    Text(
-                      AppConstants.role,
-                      style: GoogleFonts.dmMono(
-                        fontSize: 10,
-                        color: AppTheme.textSecondary,
+                      Text(
+                        AppConstants.role,
+                        style: GoogleFonts.dmMono(
+                          fontSize: 10,
+                          color: Theme.of(context).textTheme.bodySmall!.color,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
               ],
             ),
 
-            // Nav Links
-            Row(
-              children: List.generate(
-                AppConstants.navItems.length,
-                (index) => GestureDetector(
-                  onTap: () => _scrollToSection(index),
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: _activeIndex == index
-                          ? AppTheme.primaryLight
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      AppConstants.navItems[index],
-                      style: GoogleFonts.dmSans(
-                        fontSize: 13,
-                        fontWeight: _activeIndex == index
-                            ? FontWeight.w600
-                            : FontWeight.w400,
+            // Nav Links - hidden on mobile
+            if (!isMobile)
+              Row(
+                children: List.generate(
+                  AppConstants.navItems.length,
+                  (index) => GestureDetector(
+                    onTap: () => _scrollToSection(index),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 7,
+                      ),
+                      decoration: BoxDecoration(
                         color: _activeIndex == index
-                            ? AppTheme.primaryDark
-                            : AppTheme.textSecondary,
+                            ? Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.1)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        AppConstants.navItems[index],
+                        style: GoogleFonts.dmSans(
+                          fontSize: 13,
+                          fontWeight: _activeIndex == index
+                              ? FontWeight.w600
+                              : FontWeight.w400,
+                          color: _activeIndex == index
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).textTheme.bodyMedium!.color,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-
             // Hire Me Button
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
+            Row(
+              children: [
+                Consumer<ThemeController>(
+                  builder: (context, themeController, _) {
+                    return Container(
+                      margin: const EdgeInsets.only(right: 12), // 👈 ADD THIS
+                      decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: IconButton(
+                        onPressed: themeController.toggleTheme,
+                        icon: Icon(
+                          themeController.isDark
+                              ? Icons.light_mode
+                              : Icons.dark_mode,
+                          size: 18,
+                        ),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    );
+                  },
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primary,
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isMobile ? 16 : 24,
+                      vertical: isMobile ? 8 : 12,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    'Hire Me',
+                    style: GoogleFonts.syne(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
-                elevation: 0,
-              ),
-              child: Text(
-                'Hire Me',
-                style: GoogleFonts.syne(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+              ],
             ),
           ],
         ),
