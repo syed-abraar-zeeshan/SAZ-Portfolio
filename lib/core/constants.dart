@@ -6,7 +6,7 @@ class AppConstants {
   static const String email = 'abraarzeeshan27@gmail.com';
   static const String phone = '+91-7893614124';
   static const String linkedin = 'https://linkedin.com/in/syedabraarzeeshan';
-  static const String github = 'https://github.com/syedabraarzeeshan';
+  static const String github = 'https://github.com/syed-abraar-zeeshan';
 
   static const String yearsExp = '3.5+';
   static const String appsShipped = '6+';

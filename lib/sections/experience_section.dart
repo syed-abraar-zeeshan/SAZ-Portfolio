@@ -116,13 +116,12 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                           Container(
                             width: 240,
                             decoration: BoxDecoration(
-                               color: Theme.of(context).cardColor,
+                              color: Theme.of(context).cardColor,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
                                 color: Theme.of(context).dividerColor,
                                 width: 0.5,
                               ),
-
                             ),
                             child: Column(
                               children: List.generate(
@@ -162,10 +161,14 @@ class _ExperienceSectionState extends State<ExperienceSection> {
         margin: const EdgeInsets.only(right: 8, bottom: 4),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? Theme.of(context).colorScheme.primary.withValues(alpha:0.1) : Theme.of(context).colorScheme.surface,
+          color: isSelected
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
+              : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: isSelected ? AppTheme.primary : Theme.of(context).dividerColor,
+            color: isSelected
+                ? AppTheme.primary
+                : Theme.of(context).dividerColor,
             width: isSelected ? 1 : 0.5,
           ),
         ),
@@ -174,7 +177,9 @@ class _ExperienceSectionState extends State<ExperienceSection> {
           style: GoogleFonts.syne(
             fontSize: 11,
             fontWeight: FontWeight.w700,
-            color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.bodyMedium!.color,
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).textTheme.bodyMedium!.color,
           ),
         ),
       ),
@@ -190,7 +195,9 @@ class _ExperienceSectionState extends State<ExperienceSection> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: isSelected ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1) : Colors.transparent,
+          color: isSelected
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
+              : Colors.transparent,
           borderRadius: BorderRadius.vertical(
             top: index == 0 ? const Radius.circular(12) : Radius.zero,
             bottom: isLast ? const Radius.circular(12) : Radius.zero,
@@ -201,7 +208,9 @@ class _ExperienceSectionState extends State<ExperienceSection> {
               width: 3,
             ),
             bottom: BorderSide(
-              color: isLast ? Colors.transparent : Theme.of(context).dividerColor,
+              color: isLast
+                  ? Colors.transparent
+                  : Theme.of(context).dividerColor,
               width: 0.5,
             ),
           ),
@@ -236,7 +245,9 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                     exp['year'] as String,
                     style: GoogleFonts.dmMono(
                       fontSize: 10,
-                      color: isSelected ? AppTheme.primary : Theme.of(context).textTheme.bodySmall!.color,
+                      color: isSelected
+                          ? AppTheme.primary
+                          : Theme.of(context).textTheme.bodySmall!.color,
                     ),
                   ),
                 ],
@@ -260,7 +271,7 @@ class _ExperienceSectionState extends State<ExperienceSection> {
       width: double.infinity,
       padding: EdgeInsets.all(isMobile ? 20 : 32),
       decoration: BoxDecoration(
-         color: Theme.of(context).cardColor,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Theme.of(context).dividerColor, width: 0.5),
         boxShadow: [
@@ -295,9 +306,14 @@ class _ExperienceSectionState extends State<ExperienceSection> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withValues(alpha:0.1),
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: Theme.of(context).dividerColor, width: 0.5),
+              border: Border.all(
+                color: Theme.of(context).dividerColor,
+                width: 0.5,
+              ),
             ),
             child: Text(
               exp['period'] as String,
@@ -351,9 +367,14 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                       vertical: 5,
                     ),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary.withValues(alpha:0.1),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: Theme.of(context).dividerColor, width: 0.5),
+                      border: Border.all(
+                        color: Theme.of(context).dividerColor,
+                        width: 0.5,
+                      ),
                     ),
                     child: Text(
                       tag,

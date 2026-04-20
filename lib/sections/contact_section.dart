@@ -73,9 +73,14 @@ class ContactSection extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Theme.of(context).dividerColor, width: 0.5),
+              border: Border.all(
+                color: Theme.of(context).dividerColor,
+                width: 0.5,
+              ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -223,7 +228,9 @@ class _ContactCardState extends State<_ContactCard> {
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: _hovered ? Theme.of(context).colorScheme.primary: Theme.of(context).dividerColor,
+              color: _hovered
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).dividerColor,
               width: _hovered ? 1 : 0.5,
             ),
           ),
@@ -270,7 +277,9 @@ class _ContactCardState extends State<_ContactCard> {
                 Icon(
                   Icons.arrow_forward_ios,
                   size: 12,
-                  color: _hovered ? AppTheme.primary : Theme.of(context).textTheme.bodySmall!.color,
+                  color: _hovered
+                      ? AppTheme.primary
+                      : Theme.of(context).textTheme.bodySmall!.color,
                 ),
             ],
           ),

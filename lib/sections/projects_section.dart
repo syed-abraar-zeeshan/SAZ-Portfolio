@@ -191,7 +191,9 @@ class _ProjectCardState extends State<_ProjectCard> {
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: _hovered ? Theme.of(context).colorScheme.primary: Theme.of(context).dividerColor,
+            color: _hovered
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).dividerColor,
             width: _hovered ? 1 : 0.5,
           ),
           boxShadow: [
@@ -213,11 +215,11 @@ class _ProjectCardState extends State<_ProjectCard> {
               decoration: BoxDecoration(
                 gradient: Theme.of(context).brightness == Brightness.dark
                     ? LinearGradient(
-                  colors: [
-                    baseColor.withValues(alpha: 0.18),
-                    baseColor.withValues(alpha: 0.05),
-                  ],
-                )
+                        colors: [
+                          baseColor.withValues(alpha: 0.18),
+                          baseColor.withValues(alpha: 0.05),
+                        ],
+                      )
                     : null,
                 color: Theme.of(context).brightness == Brightness.dark
                     ? null
@@ -232,8 +234,8 @@ class _ProjectCardState extends State<_ProjectCard> {
                     child: Icon(
                       widget.project['icon'] as IconData,
                       size: 44,
-                      color: (widget.project['iconColor'] as Color).withValues(alpha:
-                        0.6,
+                      color: (widget.project['iconColor'] as Color).withValues(
+                        alpha: 0.6,
                       ),
                     ),
                   ),
@@ -298,8 +300,11 @@ class _ProjectCardState extends State<_ProjectCard> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).brightness == Brightness.dark
-                                  ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.12)
+                              color:
+                                  Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Theme.of(context).colorScheme.primary
+                                        .withValues(alpha: 0.12)
                                   : const Color(0xFFF3F4F6),
                               borderRadius: BorderRadius.circular(4),
                               border: Border.all(

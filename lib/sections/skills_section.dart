@@ -185,7 +185,9 @@ class _SkillCardState extends State<_SkillCard> {
                       decoration: BoxDecoration(
                         color: _hovered
                             ? Theme.of(context).colorScheme.surface
-                            : Theme.of(context).colorScheme.surface.withValues(alpha: 0.6),
+                            : Theme.of(
+                                context,
+                              ).colorScheme.surface.withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(4),
                         border: Border.all(
                           color: _hovered

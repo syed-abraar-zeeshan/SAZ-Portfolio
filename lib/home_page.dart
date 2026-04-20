@@ -58,7 +58,9 @@ class _HomePageState extends State<HomePage> {
         vertical: 24,
       ),
       decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: Theme.of(context).dividerColor, width: 0.5)),
+        border: Border(
+          top: BorderSide(color: Theme.of(context).dividerColor, width: 0.5),
+        ),
       ),
       child: isMobile
           ? Column(

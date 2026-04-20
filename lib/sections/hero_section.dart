@@ -50,7 +50,7 @@ class HeroSection extends StatelessWidget {
     );
   }
 
-  Widget _buildLeft(BuildContext context,bool isMobile) {
+  Widget _buildLeft(BuildContext context, bool isMobile) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -59,9 +59,14 @@ class HeroSection extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withValues(alpha:0.1),
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Theme.of(context).dividerColor, width: 0.5),
+              border: Border.all(
+                color: Theme.of(context).dividerColor,
+                width: 0.5,
+              ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -95,7 +100,7 @@ class HeroSection extends StatelessWidget {
               children: [
                 TextSpan(
                   text: 'Syed Abraar\n',
-                  style:GoogleFonts.syne(
+                  style: GoogleFonts.syne(
                     textStyle: Theme.of(context).textTheme.headlineLarge,
                     fontWeight: FontWeight.w800,
                     fontSize: isMobile ? 34 : 56,
@@ -181,7 +186,10 @@ class HeroSection extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  side: BorderSide(color: Theme.of(context).dividerColor, width: 0.5),
+                  side: BorderSide(
+                    color: Theme.of(context).dividerColor,
+                    width: 0.5,
+                  ),
                 ),
                 child: Text(
                   'Download Resume',
@@ -215,7 +223,6 @@ class HeroSection extends StatelessWidget {
             _buildStatCard(context, AppConstants.onTime, 'ON-TIME DELIVERY'),
           ],
         ),
-
       ],
     );
   }
@@ -224,18 +231,21 @@ class HeroSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary.withValues(alpha:0.1),
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(4),
         border: Border.all(color: Theme.of(context).dividerColor, width: 0.5),
       ),
       child: Text(
         label,
-        style: GoogleFonts.dmMono(fontSize: 10, color: Theme.of(context).colorScheme.primary),
+        style: GoogleFonts.dmMono(
+          fontSize: 10,
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }
 
-  Widget _buildStatCard(BuildContext context,String number, String label) {
+  Widget _buildStatCard(BuildContext context, String number, String label) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

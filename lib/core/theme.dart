@@ -30,9 +30,6 @@ class AppTheme {
     dividerColor: const Color(0xFF1F2937),
     textTheme: GoogleFonts.dmSansTextTheme(
       ThemeData.dark().textTheme,
-    ).apply(
-      bodyColor: Colors.white,
-      displayColor: Colors.white,
-    ),
+    ).apply(bodyColor: Colors.white, displayColor: Colors.white),
   );
 }
